@@ -20,7 +20,9 @@ const { getFirestore } = require("firebase-admin/firestore");
 // Replace the path with the actual path to your service account key JSON file
 const multer = require("multer");
 const serviceAccount = require("./smartpath-b7c1c-firebase-adminsdk-4dm4a-db709ae10a.json");
-// Initialize the Firebase Admin SDK with the service account key
+
+const { getAuth, signInWithEmailAndPassword } = require("firebase/auth");
+
 admin.initializeApp({
   credential: cert(serviceAccount),
   storageBucket: "smartpath-b7c1c.appspot.com",
@@ -206,8 +208,8 @@ app.get("/allCourses", async (req, res) => {
     collectionRef.get().then((querySnapshot) => {
       const courses = [];
       querySnapshot.forEach((doc) => {
-        const { title, description, imgLink } = doc.data();
-        courses.push({ id: doc.id, title, description, imgLink });
+        const { title, description, imgLink, length } = doc.data();
+        courses.push({ id: doc.id, title, description, imgLink, length });
       });
       res.send(courses);
       // console.log(courses);
@@ -481,7 +483,8 @@ app.post("/ask-question", async (req, res) => {
   res.json({ answer: amharicResponse });
   console.log(amharicResponse);
 });
-const port = 3005;
+const port = process.env.PORT || 3001;
+
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
+  console.log(`Server started on http://localhost:${port}`);
 });

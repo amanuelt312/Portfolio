@@ -15,6 +15,8 @@ const openaiApiKey = "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";
 const { initializeApp, cert } = require("firebase-admin/app");
 const admin = require("firebase-admin");
 
+
+
 const { getFirestore } = require("firebase-admin/firestore");
 
 // Replace the path with the actual path to your service account key JSON file

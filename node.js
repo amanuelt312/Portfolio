@@ -5,17 +5,20 @@ const fs = require("fs/promises");
 
 const app = express();
 app.use(cors());
+const { OpenAI } = require("openai");
+const openai = new OpenAI({
+  apiKey: "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",
+});
+
 const path = require("path");
 app.use(express.json());
 const microsoftTranslatorApiKey =
   "274b461760msh06015e359556e68p18418bjsn5e3aa3cd5e54";
-const openaiApiKey = "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";
+// const openaiApiKey = "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";
 
 //firebase
 const { initializeApp, cert } = require("firebase-admin/app");
 const admin = require("firebase-admin");
-
-
 
 const { getFirestore } = require("firebase-admin/firestore");
 
@@ -412,14 +415,14 @@ const translateToAmharic = async (text) => {
 };
 app.post("/explan", async (req, res) => {
   const { text } = req.body;
-  const { Configuration, OpenAIApi } = require("openai");
 
-  const configuration = new Configuration({
-    apiKey: openaiApiKey,
-  });
-  const openai = new OpenAIApi(configuration);
+  // const configuration = new Configuration({
+  //   apiKey: openaiApiKey,
+  // });
+  // const openaiApiKey = "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";
 
-  const completion = await openai.createChatCompletion({
+  console.log("explaning ", text);
+  const completion = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
       {
@@ -433,57 +436,28 @@ app.post("/explan", async (req, res) => {
       },
     ],
   });
-  res.json({ answer: completion.data.choices[0].message.content });
+  // console.log(completion.choices[0].message.content);
+  res.json({ answer: completion.choices[0].message.content });
 });
 
 app.post("/ask-question", async (req, res) => {
-  const { question } = req.body;
+  const { text, question } = req.body;
 
-  // Translate the user's input question from Amharic to English
-  const englishQuestion = await translateToEnglish(question);
-  console.log("eng: " + englishQuestion);
-
-  if (!englishQuestion) {
-    // Handle translation error
-    return res.status(500).json({ error: "Translation to English failed" });
-  }
-
-  // Call the OpenAI API with the translated English question
-  const { Configuration, OpenAIApi } = require("openai");
-
-  const configuration = new Configuration({
-    apiKey: openaiApiKey,
-  });
-  const openai = new OpenAIApi(configuration);
-
-  const completion = await openai.createChatCompletion({
+  const completion = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
-        content:
-          "You are a helpful assistant that provides explanations for beginners that are learning. Now explain the following question in a simple and short way:",
+        content: `You are a helpful assistant that provides explanations for beginners that are learning programming. Now answer the following question in a simple and short way: the is from the following paragraph. ${text}`,
       },
       {
         role: "user",
-        content: englishQuestion,
+        content: question,
       },
     ],
   });
-  console.log("after asking: " + completion.data.choices[0].message.content);
-  // Translate the English response from OpenAI back to Amharic
-  const amharicResponse = await translateToAmharic(
-    completion.data.choices[0].message.content
-  );
-
-  if (!amharicResponse) {
-    // Handle translation error
-    return res.status(500).json({ error: "Translation to Amharic failed" });
-  }
-
-  // Send the translated response back to the frontend
-  res.json({ answer: amharicResponse });
-  console.log(amharicResponse);
+  console.log(completion.choices[0].message.content);
+  res.json({ answer: completion.choices[0].message.content });
 });
 const port = process.env.PORT || 3001;
 

@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Big+Shoulders+Display&display=swap");
+/* .mainn {
+  background: hsl(267, 17%, 12%);
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  min-height: 100vh;
+} */
+img {
+  position: fixed;
+
+  top: 4%;
+  left: 0%;
+  border-radius: 50px;
+  opacity: 0.9;
+  transition: 0.5s;
+}
+h2 {
+  transition: transform 2s;
+  font-size: 60px;
+  color: white;
+  font-family: "Big Shoulders Display", cursive;
+  text-align: center;
+}
+
+.card:hover > p {
+  opacity: 1;
+  transform: scale(1.5);
+  top: 80%;
+}
+
+img,
+#parent {
+  cursor: pointer;
+}
+.card:hover > img {
+  opacity: 1;
+  transform: scale(1.4);
+}
+.card header {
+  position: absolute;
+
+  top: 130%;
+  left: 0%;
+  padding: 1px;
+  border-radius: 25px;
+  width: 250px;
+  height: 90px;
+  transition: all 0.5s;
+  opacity: 0;
+}
+img:hover .card {
+}
+.card:hover > header {
+  opacity: 1;
+  width: 250px;
+  height: 110px;
+  transform: translateY(-120px);
+}
+
+.card {
+  transition: transform 0.7s;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 250px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+  background: white;
+  width: 250px;
+  height: 250px;
+}
+.card:hover {
+  transform: scale(1.08);
+}
+.centeri {
+  /* position: fixed; */
+  top: 40%;
+  left: 40%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+/* span {
+  position: relative;
+} */
